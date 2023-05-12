@@ -34,6 +34,7 @@ vision/classification/resnet152-v1-7
 vision/classification/WRN-50-2
 vision/super-resolution/SRCNN
 vision/super-resolution/VDSR
+vision/super-resolution/basicvsr
 vision/detection/ultralytics-yolov3
 vision/detection/Yet-Another-EfficientDet-Pytorch
 vision/detection/yolov5

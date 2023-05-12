@@ -1,0 +1,97 @@
+---
+name: basicvsr_spynet
+pure_name: basicvsr_spynet
+
+gops: [19.66]
+shapes:
+  - [[1, 3, 160, 192], [1, 3, 160, 192]]
+
+model: $(home)/basicvsr_spynet.pt
+
+upsample_shape_key: 1x3x144x176-1x64x144x176-1x64x144x176
+upsample_shape_key4: 4x3x144x176-4x64x144x176-4x64x144x176
+
+bwdir: $(workdir)/../basicvsr_backward-1x3x144x176-1x64x144x176/
+fwdir: $(workdir)/../basicvsr_forward-1x3x144x176-1x64x144x176/
+uwkdir: $(workdir)/../basicvsr_upsample-$(upsample_shape_key)/
+
+cali_input_key: cali_basicvsr_spynet
+
+time_rountds: 50
+time: true
+precision: true
+
+excepts: "220,flow_up1.1,flow3.1,578,586,input6.1,264,\
+  flow_up2.1,flow4.1,627,637,645,308,flow_up3.1,\
+  flow5.1,676,686,696,704,19"
+
+mlir_transform: model_transform.py
+  --model_name $(name)
+  --model_def $(model)
+  --tolerance 0.99,0.9
+  --test_input $(root)/dataset/basicvsr/cali_basicvsr_spynet/1.npz
+  --input_shapes [$(shape_param)]
+  --excepts $(excepts)
+  --test_result $(workdir)/$(pure_name)_top_outputs.npz
+  --mlir $(workdir)/$(pure_name).mlir
+
+mlir_calibration: run_calibration.py $(workdir)/$(pure_name).mlir
+  --dataset $(root)/dataset/basicvsr/$(cali_input_key)
+  --input_num 10
+  -o $(workdir)/$(pure_name)_cali_table
+
+BM1684:
+  deploy:
+    - model_deploy.py
+      --mlir $(workdir)/$(pure_name).mlir
+      --quantize F32
+      --chip $(target)
+      --test_input $(workdir)/$(pure_name)_in_f32.npz
+      --test_reference $(workdir)/$(pure_name)_top_outputs.npz
+      --model $(workdir)/$(pure_name)_$(target)_f32.bmodel
+
+    - model_deploy.py
+      --mlir $(workdir)/$(pure_name).mlir
+      --quantize INT8
+      --chip $(target)
+      --tolerance 0.85,0.45
+      --test_input $(workdir)/$(pure_name)_in_f32.npz
+      --test_reference $(workdir)/$(pure_name)_top_outputs.npz
+      --model $(workdir)/$(pure_name)_$(target)_int8_sym.bmodel
+      --quantize_table $(home)/$(name)_qtable
+      --calibration_table $(workdir)/$(pure_name)_cali_table
+
+  harness:
+    type: basicvsr
+    args:
+      - name: FP32
+        bmodel: $(workdir)/$(pure_name)_$(target)_f32.bmodel
+        spynet: $(workdir)/$(pure_name)_$(target)_f32.bmodel
+        backward: $(bwdir)/basicvsr_backward_$(target)_f32.bmodel
+        forward: $(fwdir)/basicvsr_forward_$(target)_f32.bmodel
+        upsample: $(uwkdir)/basicvsr_upsample_$(target)_f32.bmodel
+        lrkey: BDx4
+      - name: FP32
+        bmodel: $(workdir)/$(pure_name)_$(target)_f32.bmodel
+        spynet: $(workdir)/$(pure_name)_$(target)_f32.bmodel
+        backward: $(bwdir)/basicvsr_backward_$(target)_f32.bmodel
+        forward: $(fwdir)/basicvsr_forward_$(target)_f32.bmodel
+        upsample: $(uwkdir)/basicvsr_upsample_$(target)_f32.bmodel
+        lrkey: BIx4
+      - name: INT8
+        bmodel: $(workdir)/$(pure_name)_$(target)_int8_sym.bmodel
+        spynet: $(workdir)/$(pure_name)_$(target)_int8_sym.bmodel
+        backward: $(bwdir)/basicvsr_backward_$(target)_int8_sym.bmodel
+        forward: $(fwdir)/basicvsr_forward_$(target)_int8_sym.bmodel
+        upsample: $(uwkdir)/basicvsr_upsample_$(target)_int8_sym.bmodel
+        lrkey: BDx4
+      - name: INT8
+        bmodel: $(workdir)/$(pure_name)_$(target)_int8_sym.bmodel
+        spynet: $(workdir)/$(pure_name)_$(target)_int8_sym.bmodel
+        backward: $(bwdir)/basicvsr_backward_$(target)_int8_sym.bmodel
+        forward: $(fwdir)/basicvsr_forward_$(target)_int8_sym.bmodel
+        upsample: $(uwkdir)/basicvsr_upsample_$(target)_int8_sym.bmodel
+        lrkey: BIx4
+
+width: 176
+val_file: $(root)/dataset/basicvsr/eval

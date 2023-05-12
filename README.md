@@ -52,6 +52,10 @@ python3 .github/workflows/check.py
 |adaface                          |[vision/recognition/adaface](vision/recognition/adaface)                                              |                    |:white\_check\_mark:|
 |alexnet                          |[vision/classification/AlexNet-Caffe](vision/classification/AlexNet-Caffe)                            |:white\_check\_mark:|                    |
 |arcface                          |[vision/recognition/arcface](vision/recognition/arcface)                                              |                    |:white\_check\_mark:|
+|basicvsr_backward                |[vision/super-resolution/basicvsr](vision/super-resolution/basicvsr)                                  |                    |:white\_check\_mark:|
+|basicvsr_forward                 |[vision/super-resolution/basicvsr](vision/super-resolution/basicvsr)                                  |                    |:white\_check\_mark:|
+|basicvsr_spynet                  |[vision/super-resolution/basicvsr](vision/super-resolution/basicvsr)                                  |                    |:white\_check\_mark:|
+|basicvsr_upsample                |[vision/super-resolution/basicvsr](vision/super-resolution/basicvsr)                                  |                    |:white\_check\_mark:|
 |big\_transfer                    |[vision/classification/big\_transfer\_mlir](vision/classification/big_transfer_mlir)                  |                    |:white\_check\_mark:|
 |BiSeNet                          |[vision/segmentation/BiSeNet](vision/segmentation/BiSeNet)                                            |                    |:white\_check\_mark:|
 |c3d                              |[vision/video-recognition/C3D](vision/video-recognition/C3D)                                          |:white\_check\_mark:|:white\_check\_mark:|

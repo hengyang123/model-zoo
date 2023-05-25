@@ -1,7 +1,11 @@
 ---
 
 name: openpose
-gops: 98.7
+gops: [98.7, 197.4]
+shapes:
+  - [1, 3, 216, 384]
+  - [4, 3, 216, 384]
+precision: true
 
 mlir_transform:
   model_transform.py
@@ -9,9 +13,18 @@ mlir_transform:
     --model_def $(home)/pose_deploy.prototxt
     --model_data $(home)/pose_iter_584000.caffemodel
     --test_input $(root)/dataset/samples/reid_img.jpg
-    --input_shapes [[1,3,216,384]]
+    --input_shapes [$(shape_param)]
+    --mean 0.0,0.0,0.0
+    --scale 0.0039216,0.0039216,0.0039216
     --test_result $(name)_top_outputs.npz
     --mlir $(workdir)/transformed.mlir
+
+mlir_calibration:
+  run_calibration.py $(workdir)/transformed.mlir
+    --dataset $(coco2017_mlir_cali_set)
+    --input_num 100
+    -o $(workdir)/$(name).calitable
+    --debug_cmd use_percentile9999
 
 BM1684X:
   deploy:
@@ -33,3 +46,21 @@ BM1684X:
         --test_reference $(name)_top_outputs.npz
         --tolerance 0.69,0.14
         --model $(workdir)/$(name)_bm1684x_int8_asym.bmodel
+
+BM1684:
+  deploy:
+    - model_deploy.py  --mlir $(workdir)/transformed.mlir
+        --quantize F32
+        --chip $(target)
+        --test_input $(workdir)/$(name)_in_f32.npz
+        --test_reference $(name)_top_outputs.npz
+        --tolerance 0.99,0.99
+        --model $(workdir)/$(name)_$(target)_f32.bmodel
+    - model_deploy.py --mlir $(workdir)/transformed.mlir
+        --quantize INT8
+        --calibration_table $(workdir)/$(name).calitable
+        --chip $(target)
+        --test_input $(workdir)/$(name)_in_f32.npz
+        --test_reference $(name)_top_outputs.npz
+        --tolerance 0.9,0.8
+        --model $(workdir)/$(name)_$(target)_int8_sym.bmodel

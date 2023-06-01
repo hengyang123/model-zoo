@@ -30,6 +30,14 @@ on:
         default: '--full'
         required: false
         type: string
+      toolchain:
+        description: 'Toolchain to run'
+        default: nntc
+        required: true
+        type: choice
+        options:
+          - mlir
+          - nntc
 
 concurrency:
   group: "${{ github.workflow }}-${{ github.event.pull_request.number || \
@@ -91,7 +99,8 @@ jobs:
       - run: .github/workflows/lfs_validate.sh
 
   mlir_test_build:
-    if: github.repository == 'sophgo/model-zoo'
+    if: github.repository == 'sophgo/model-zoo' && 
+      ${{ inputs.toolchain }} == "mlir" || ${{ inputs.toolchain }} == ''
     name: MLIR Build
     runs-on: build
     timeout-minutes: 10080
@@ -132,7 +141,8 @@ jobs:
         run: .github/workflows/cleanup.sh
 
   mlir_test_runtime:
-    if: github.repository == 'sophgo/model-zoo'
+    if: github.repository == 'sophgo/model-zoo' &&
+      ${{ inputs.toolchain }} == "mlir" || ${{ inputs.toolchain }} == ''
     name: MLIR ${{ matrix.target }} ${{ matrix.host-arch }} Runtime
     strategy:
       matrix:
@@ -179,7 +189,8 @@ jobs:
           .github/workflows/cleanup.sh
 
   nntc_test_build:
-    if: github.repository == 'sophgo/model-zoo'
+    if: github.repository == 'sophgo/model-zoo' &&
+      ${{ inputs.toolchain }} == "nntc" || ${{ inputs.toolchain }} == ''
     name: NNTC Build
     runs-on: build
     timeout-minutes: 10080
@@ -220,7 +231,8 @@ jobs:
         run: .github/workflows/cleanup.sh
 
   nntc_test_runtime:
-    if: github.repository == 'sophgo/model-zoo'
+    if: github.repository == 'sophgo/model-zoo' &&
+      ${{ inputs.toolchain }} == "nntc" || ${{ inputs.toolchain }} == ''
     name: NNTC ${{ matrix.target }} ${{ matrix.host-arch }} Runtime
     strategy:
       matrix:

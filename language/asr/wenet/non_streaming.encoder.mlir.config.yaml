@@ -1,0 +1,41 @@
+---
+
+name: WenetSpeechNonStreamingEncoder
+
+gops: [6.50356951]
+
+shapes:
+  - [[1, 998, 80], [1]]
+
+model: $(home)/wenetspeech-non-streaming-encoder.onnx
+
+runtime_cmp: false
+
+mlir_transform:
+  model_transform.py
+    --model_name $(name)
+    --model_def $(model)
+    --test_input $(root)/dataset/npz_input/wenet_encoder.npz
+    --input_shapes [$(shape_param)]
+    --excepts /encoders.3/self_attn/Where_output_0_Where
+    --test_result $(workdir)/$(name)_top_outputs.npz
+    --mlir $(workdir)/transformed.mlir
+    --output_names "encoder_out,encoder_out_lens,ctc_log_probs"
+
+BM1684X:
+  deploy:
+    - model_deploy.py  --mlir $(workdir)/transformed.mlir
+        --quantize F32
+        --chip $(target)
+        --test_input $(workdir)/$(name)_in_f32.npz
+        --test_reference $(workdir)/$(name)_top_outputs.npz
+        --tolerance 0.99,0.99
+        --model $(workdir)/$(name)_bm1684x_f32.bmodel
+    - model_deploy.py  --mlir $(workdir)/transformed.mlir
+        --quantize F16
+        --chip $(target)
+        --test_input $(workdir)/$(name)_in_f32.npz
+        --quantize_table $(home)/non_streaming_encoder_qtable
+        --test_reference $(workdir)/$(name)_top_outputs.npz
+        --tolerance 0.99,0.99
+        --model $(workdir)/$(name)_bm1684x_f16.bmodel

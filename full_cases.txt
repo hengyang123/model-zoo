@@ -117,3 +117,5 @@ vision/generative/stable_diffusion
 vision/detection/yolov8
 vision/detection/dbnet
 language/nlp/ernie-3.0-medium-zh
+vision/classification/ResNeXt50-v1
+vision/classification/ResNeXt50-v2

@@ -100,7 +100,7 @@ jobs:
 
   mlir_test_build:
     if: github.repository == 'sophgo/model-zoo' && 
-      ${{ inputs.toolchain }} == "mlir" || ${{ inputs.toolchain }} == ''
+      (inputs.toolchain == 'mlir' || inputs.toolchain == '')
     name: MLIR Build
     runs-on: build
     timeout-minutes: 10080
@@ -142,7 +142,7 @@ jobs:
 
   mlir_test_runtime:
     if: github.repository == 'sophgo/model-zoo' &&
-      ${{ inputs.toolchain }} == "mlir" || ${{ inputs.toolchain }} == ''
+      (inputs.toolchain == 'mlir' || inputs.toolchain == '')
     name: MLIR ${{ matrix.target }} ${{ matrix.host-arch }} Runtime
     strategy:
       matrix:
@@ -190,7 +190,7 @@ jobs:
 
   nntc_test_build:
     if: github.repository == 'sophgo/model-zoo' &&
-      ${{ inputs.toolchain }} == "nntc" || ${{ inputs.toolchain }} == ''
+      (inputs.toolchain == 'nntc' || inputs.toolchain == '')
     name: NNTC Build
     runs-on: build
     timeout-minutes: 10080
@@ -232,7 +232,7 @@ jobs:
 
   nntc_test_runtime:
     if: github.repository == 'sophgo/model-zoo' &&
-      ${{ inputs.toolchain }} == "nntc" || ${{ inputs.toolchain }} == ''
+      (inputs.toolchain == 'nntc' || inputs.toolchain == '')
     name: NNTC ${{ matrix.target }} ${{ matrix.host-arch }} Runtime
     strategy:
       matrix:

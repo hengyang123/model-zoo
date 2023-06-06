@@ -12,6 +12,8 @@
 |--------------------|:----------------------------|
 | S-DCNet_SHA (onnx) | [57.2 MB](S-DCNet_SHA.onnx) |
 | S-DCNet_SHB (onnx) | [57.1 MB](S-DCNet_SHB.onnx) |
+| S-DCNet_SHA (pt)   | [113.1 MB](S-DCNet_SHA.pt)  |
+| S-DCNet_SHB (pt)   | [113.1 MB](S-DCNet_SHB.pt)  |
 
 ## References
 

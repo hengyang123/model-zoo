@@ -38,3 +38,6 @@ squadv1_val_set: $(root)/dataset/SQuAD/val
 CAIL2019_divorce_cali_set: $(root)/dataset/CAIL2019/divorce/caliset
 CAIL2019_divorce_val_set: $(root)/dataset/CAIL2019/divorce/dev.txt
 CAIL2019_divorce_label_set: $(root)/dataset/CAIL2019/divorce/label.txt
+
+SHA_Density_Map_cali_set: $(root)/dataset/density/SHA_Density_Map
+SHB_Density_Map_cali_set: $(root)/dataset/density/SHB_Density_Map

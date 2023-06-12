@@ -5,6 +5,7 @@ vision/OCR/OCRv3_paddle
 vision/OCR/DBNet
 vision/video-recognition/C3D
 vision/pose-estimation/openpose
+vision/pose-estimation/kapao
 vision/classification/MobileNet-Caffe-v2
 vision/classification/DenseNet-Caffe
 vision/classification/ResNet50-Caffe
@@ -36,6 +37,7 @@ vision/super-resolution/VDSR
 vision/detection/ultralytics-yolov3
 vision/detection/Yet-Another-EfficientDet-Pytorch
 vision/detection/yolov5
+vision/detection/yolov7
 vision/detection/py-R-FCN
 vision/detection/yolov3_tiny
 vision/detection/pointpillars

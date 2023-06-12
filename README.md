@@ -84,6 +84,7 @@ python3 .github/workflows/check.py
 |inception\_v4                    |[vision/classification/inception\_v4](vision/classification/inception_v4)                             |:white\_check\_mark:|                    |
 |inception\_v4-tflite             |[vision/classification/inception\_v4](vision/classification/inception_v4)                             |                    |:white\_check\_mark:|
 |inceptionBN21k                   |[vision/classification/InceptionBN-21k-for-Caffe](vision/classification/InceptionBN-21k-for-Caffe)    |:white\_check\_mark:|                    |
+|kapao                            |[vision/pose-estimation/kapao](vision/pose-estimation/kapao)                                          |                    |:white\_check\_mark:|
 |lenet                            |[vision/classification/LeNet](vision/classification/LeNet)                                            |:white\_check\_mark:|                    |
 |lprnet                           |[vision/detection/lprnet](vision/detection/lprnet)                                                    |                    |:white\_check\_mark:|
 |market\_bot\_R50                 |[vision/reid/market\_bot\_R50](vision/reid/market_bot_R50)                                            |:white\_check\_mark:|:white\_check\_mark:|
@@ -185,6 +186,13 @@ python3 .github/workflows/check.py
 |yolov5s-tflite                   |[vision/detection/yolov5](vision/detection/yolov5)                                                    |                    |:white\_check\_mark:|
 |yolov5x                          |[vision/detection/yolov5](vision/detection/yolov5)                                                    |                    |:white\_check\_mark:|
 |yolov5x-5                        |[vision/detection/yolov5](vision/detection/yolov5)                                                    |:white\_check\_mark:|                    |
+|yolov7                           |[vision/detection/yolov7](vision/detection/yolov7)                                                    |                    |:white\_check\_mark:|
+|yolov7-d6                        |[vision/detection/yolov7](vision/detection/yolov7)                                                    |                    |:white\_check\_mark:|
+|yolov7-e6                        |[vision/detection/yolov7](vision/detection/yolov7)                                                    |                    |:white\_check\_mark:|
+|yolov7-e6e                       |[vision/detection/yolov7](vision/detection/yolov7)                                                    |                    |:white\_check\_mark:|
+|yolov7-tiny                      |[vision/detection/yolov7](vision/detection/yolov7)                                                    |                    |:white\_check\_mark:|
+|yolov7-w6                        |[vision/detection/yolov7](vision/detection/yolov7)                                                    |                    |:white\_check\_mark:|
+|yolov7x                          |[vision/detection/yolov7](vision/detection/yolov7)                                                    |                    |:white\_check\_mark:|
 |yolov8l                          |[vision/detection/yolov8](vision/detection/yolov8)                                                    |                    |:white\_check\_mark:|
 |yolov8m                          |[vision/detection/yolov8](vision/detection/yolov8)                                                    |                    |:white\_check\_mark:|
 |yolov8n                          |[vision/detection/yolov8](vision/detection/yolov8)                                                    |                    |:white\_check\_mark:|

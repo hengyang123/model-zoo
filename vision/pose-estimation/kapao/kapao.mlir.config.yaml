@@ -1,0 +1,40 @@
+---
+
+name: kapao
+gops: 69.36
+shapes:
+  - [1, 3, 1280, 1280]
+
+mlir_transform:
+  model_transform.py
+    --model_name $(name)
+    --model_def $(home)/kapao.onnx
+    --test_input $(root)/dataset/samples/dog.jpg
+    --input_shapes [$(shape_param)]
+    --mean 123.675,116.28,103.53
+    --scale 0.01712475,0.017507,0.01742919
+    --pixel_format rgb
+    --test_result $(name)_top_outputs.npz
+    --mlir $(workdir)/transformed.mlir
+
+BM1684X:
+  deploy:
+    - model_deploy.py  --mlir $(workdir)/transformed.mlir
+      --quantize F32
+      --chip bm1684x
+      --test_input $(workdir)/$(name)_in_f32.npz
+      --test_reference $(name)_top_outputs.npz
+      --tolerance 0.99,0.99
+      --model $(workdir)/$(name)_bm1684x_f32.bmodel
+
+    - model_deploy.py --mlir $(workdir)/transformed.mlir
+      --quantize INT8
+      --calibration_table $(home)/$(name)_cali_table
+      --chip bm1684x
+      --test_input $(workdir)/$(name)_in_f32.npz
+      --test_reference $(name)_top_outputs.npz
+      --except output_Concat
+      --tolerance 0.80,0.54
+      --quant_input
+      --quant_output
+      --model $(workdir)/$(name)_bm1684x_int8_sym.bmodel

@@ -1,0 +1,61 @@
+# genetated time: 2023-05-08 20:22:21.816874
+# sample number: 10
+# chip: bm1684x  mix_mode: F16
+# number of F16 layer: 53
+###
+# op_name   quantize_mode
+
+/model.162/m.2/Conv_output_0_Conv           F16
+/model.162/Reshape_4_output_0_Reshape       F16
+/model.162/Transpose_2_output_0_Transpose   F16
+/model.162/Sigmoid_2_output_0_Sigmoid       F16
+/model.162/Split_2_output_0_Split           F16
+/model.162/Split_2_output_1_Split           F16
+/model.162/Split_2_output_2_Split           F16
+/model.162/Mul_4_output_0_Mul               F16
+/model.162/Add_2_output_0_Add               F16
+/model.162/Pow_2_output_0_Pow               F16
+/model.162/Mul_5_output_0_Mul               F16
+/model.162/Concat_2_output_0_Concat         F16
+/model.162/Reshape_5_output_0_Reshape       F16
+/model.162/m.3/Conv_output_0_Conv           F16
+/model.162/Reshape_6_output_0_Reshape       F16
+/model.162/Transpose_3_output_0_Transpose   F16
+/model.162/Sigmoid_3_output_0_Sigmoid       F16
+/model.162/Split_3_output_0_Split           F16
+/model.162/Split_3_output_1_Split           F16
+/model.162/Split_3_output_2_Split           F16
+/model.162/Mul_6_output_0_Mul               F16
+/model.162/Add_3_output_0_Add               F16
+/model.162/Pow_3_output_0_Pow               F16
+/model.162/Mul_7_output_0_Mul               F16
+/model.162/Concat_3_output_0_Concat         F16
+/model.162/Reshape_7_output_0_Reshape       F16
+/model.162/m.1/Conv_output_0_Conv           F16
+/model.162/Reshape_2_output_0_Reshape       F16
+/model.162/Transpose_1_output_0_Transpose   F16
+/model.162/Sigmoid_1_output_0_Sigmoid       F16
+/model.162/Split_1_output_0_Split           F16
+/model.162/Split_1_output_1_Split           F16
+/model.162/Split_1_output_2_Split           F16
+/model.162/Mul_2_output_0_Mul               F16
+/model.162/Add_1_output_0_Add               F16
+/model.162/Pow_1_output_0_Pow               F16
+/model.162/Mul_3_output_0_Mul               F16
+/model.162/Concat_1_output_0_Concat         F16
+/model.162/Reshape_3_output_0_Reshape       F16
+/model.162/m.0/Conv_output_0_Conv           F16
+/model.162/Reshape_output_0_Reshape       F16
+/model.162/Transpose_output_0_Transpose   F16
+/model.162/Sigmoid_output_0_Sigmoid       F16
+/model.162/Split_output_0_Split           F16
+/model.162/Split_output_1_Split           F16
+/model.162/Split_output_2_Split           F16
+/model.162/Mul_output_0_Mul               F16
+/model.162/Add_output_0_Add               F16
+/model.162/Pow_output_0_Pow               F16
+/model.162/Mul_1_output_0_Mul               F16
+/model.162/Concat_output_0_Concat         F16
+/model.162/Reshape_1_output_0_Reshape       F16
+output_Concat F16
+

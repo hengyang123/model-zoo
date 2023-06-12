@@ -1,0 +1,46 @@
+# genetated time: 2023-05-06 21:45:17.217256
+# sample number: 10
+# chip: bm1684x  mix_mode: F16
+# number of F16 layer: 40
+###
+# op_name   quantize_mode
+/model.105/m.0/Conv_output_0_Conv F16
+/model.105/Reshape_output_0_Reshape F16
+/model.105/Transpose_output_0_Transpose F16
+/model.105/Sigmoid_output_0_Sigmoid F16
+/model.105/Split_output_0_Split F16
+/model.105/Split_output_1_Split F16
+/model.105/Split_output_2_Split F16
+/model.105/Mul_output_0_Mul F16
+/model.105/Add_output_0_Add F16
+/model.105/Pow_output_0_Pow F16
+/model.105/Mul_1_output_0_Mul F16
+/model.105/Concat_output_0_Concat F16
+/model.105/Reshape_1_output_0_Reshape F16
+/model.105/m.1/Conv_output_0_Conv F16
+/model.105/Reshape_2_output_0_Reshape F16
+/model.105/Transpose_1_output_0_Transpose F16
+/model.105/Sigmoid_1_output_0_Sigmoid F16
+/model.105/Split_1_output_0_Split F16
+/model.105/Split_1_output_1_Split F16
+/model.105/Split_1_output_2_Split F16
+/model.105/Mul_2_output_0_Mul F16
+/model.105/Add_1_output_0_Add F16
+/model.105/Pow_1_output_0_Pow F16
+/model.105/Mul_3_output_0_Mul F16
+/model.105/Concat_1_output_0_Concat F16
+/model.105/Reshape_3_output_0_Reshape F16
+/model.105/m.2/Conv_output_0_Conv F16
+/model.105/Reshape_4_output_0_Reshape F16
+/model.105/Transpose_2_output_0_Transpose F16
+/model.105/Sigmoid_2_output_0_Sigmoid F16
+/model.105/Split_2_output_0_Split F16
+/model.105/Split_2_output_1_Split F16
+/model.105/Split_2_output_2_Split F16
+/model.105/Mul_4_output_0_Mul F16
+/model.105/Add_2_output_0_Add F16
+/model.105/Pow_2_output_0_Pow F16
+/model.105/Mul_5_output_0_Mul F16
+/model.105/Concat_2_output_0_Concat F16
+/model.105/Reshape_5_output_0_Reshape F16
+output_Concat F16

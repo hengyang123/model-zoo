@@ -1,0 +1,31 @@
+---
+
+name: LLaMA-7B
+gops: 1435.969
+shapes:
+  - [[1, 2048]]
+
+model: $(home)/LLaMA-7B.onnx
+time: true
+
+excepts: "/model/layers.0/self_attn/Add_2_output_0_Add,\
+      /model/layers.0/self_attn/Max_output_0_Max"
+
+mlir_transform: model_transform.py
+  --model_name $(name)
+  --model_def $(home)/$(name).onnx
+  --test_input $(home)/$(name)_in.npz
+  --input_shapes [$(shape_param)]
+  --test_result $(workdir)/$(name)_top_outputs.npz
+  --excepts $(excepts)
+  --mlir $(workdir)/$(name).mlir
+
+BM1684X:
+  deploy:
+    - model_deploy.py --mlir $(workdir)/$(name).mlir
+      --quantize F16
+      --chip $(target)
+      --tolerance 0.99,0.97
+      --test_input $(workdir)/$(name)_in_f32.npz
+      --test_reference $(workdir)/$(name)_top_outputs.npz
+      --model $(workdir)/$(name)_$(target)_f16.bmodel

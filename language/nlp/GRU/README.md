@@ -15,7 +15,7 @@ GRU, introduced by Cho et al. in 2014, is designed to solve the vanishing gradie
 
 ## Dataset
 
-* [SST](https://nlp.stanford.edu/sentiment/index.html)
+* [SST](https://paperswithcode.com/dataset/sst)
 
 ## References
 

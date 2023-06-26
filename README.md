@@ -204,7 +204,7 @@ python3 .github/workflows/check.py
 
 |Model                             |Path                                                                          |NNTC                |MLIR                |
 |:-                                |:-                                                                            |:-                  |:-                  |
-|bert                              |[language/nlp/bert](language/nlp/bert)                                        |:white\_check\_mark:|                    |
+|bert                              |[language/nlp/bert](language/nlp/bert)                                        |:white\_check\_mark:|:white\_check\_mark:|
 |bert\_base\_squad\_uncased-2.11.0 |[language/nlp/Huggingface_bert_squadv1](language/nlp/Huggingface_bert_squadv1)|                    |:white\_check\_mark:|
 |bert\_base\_squad\_uncased-4.23.0 |[language/nlp/Huggingface_bert_squadv1](language/nlp/Huggingface_bert_squadv1)|                    |:white\_check\_mark:|
 |bert\_base\_transformers-2.11.0   |[language/nlp/Huggingface_bert_squadv1](language/nlp/Huggingface_bert_squadv1)|:white\_check\_mark:|                    |

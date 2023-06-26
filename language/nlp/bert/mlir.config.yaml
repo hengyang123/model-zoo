@@ -1,0 +1,32 @@
+---
+
+name: bert
+
+gops: [42.87]
+
+shapes:
+  - [1, 256]
+
+model: $(home)/bert4torch_jit.pt
+
+precision: true
+
+mlir_transform:
+  model_transform.py
+    --model_name $(name)
+    --model_def $(model)
+    --test_input $(root)/dataset/npz_input/GRU_input.npy
+    --input_shapes [$(shape_param)]
+    --channel_format none
+    --test_result $(workdir)/$(name)_top_outputs.npz
+    --mlir $(workdir)/transformed.mlir
+
+BM1684:
+  deploy:
+    - model_deploy.py  --mlir $(workdir)/transformed.mlir
+        --quantize F32
+        --chip $(target)
+        --test_input $(workdir)/$(name)_in_f32.npz
+        --test_reference $(workdir)/$(name)_top_outputs.npz
+        --tolerance 0.99,0.99
+        --model $(workdir)/$(name)_$(target)_f32.bmodel

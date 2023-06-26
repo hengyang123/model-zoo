@@ -38,6 +38,15 @@ on:
         options:
           - mlir
           - nntc
+      blame:
+        description: 'Trigger the blame regression test'
+        default: false
+        required: true
+        type: choice
+        options:
+          - true
+          - false
+
 
 concurrency:
   group: "${{ github.workflow }}-${{ github.event.pull_request.number || \
@@ -133,8 +142,15 @@ jobs:
 
       - name: Test
         run: ".github/workflows/test.sh -m 'build and mlir' \
-                  ${{ inputs.cases }}"
+                 ${{ inputs.cases }}"
         id: test
+
+      - name: Post failed cases
+        if: ${{ failure() == 'true' &&
+                (inputs.cases == 'true' || github.event_name == 'schedule') }}
+        run: |
+          test/post_failed_cases.sh --sdk \
+              ${{ steps.test.outputs.MLIR_MODEL_TAR }}
 
       - name: Cleanup
         if: ${{ cancelled() || failure() }}
@@ -234,6 +250,13 @@ jobs:
         run: ".github/workflows/test.sh -m 'build and nntc' \
                   ${{ inputs.cases }}"
         id: test
+
+      - name: Post failed cases
+        if: ${{ failure() == 'true' &&
+          (inputs.cases == 'true' || github.event_name == 'schedule') }}
+        run: |
+          test/post_failed_cases.sh --sdk \
+              ${{ steps.test.outputs.NNTC_MODEL_TAR }}
 
       - name: Cleanup
         if: ${{ cancelled() || failure() }}

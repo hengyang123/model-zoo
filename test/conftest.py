@@ -190,6 +190,18 @@ def write_github_output(key, value):
     with open(output_fn, mode) as f:
         f.write(f'{key}={value}\n')
 
+def get_toolchain_cmtId(sdk):
+    toolchain = sdk.split('_')[0]
+
+    if toolchain == 'tpu-mlir':
+        cmt_id = sdk.split('_')[1].split('-')[1][1:]
+    elif toolchain == 'tpu-nntc':
+        toolchain = 'nntoolchain'
+        cmt_id = sdk.split('_')[1].split('-')[1]
+
+    output = f'{toolchain}_{cmt_id}'
+    return output
+
 @pytest.fixture(scope='session')
 def nntc_docker(latest_tpu_perf_whl):
     # Env assertion
@@ -232,7 +244,7 @@ def nntc_docker(latest_tpu_perf_whl):
             f.write(f'NNTC_CONTAINER={nntc_container.name}\n')
 
     # Remove old outputs
-    nntc_container.exec_run(f'bash -c "rm -rf *out*"', tty=True)
+    nntc_container.exec_run(f'bash -c "rm -rf *out* *_failed_cases.json"', tty=True)
 
     logging.info(f'Setting up NNTC')
     ret, _ = nntc_container.exec_run(
@@ -251,7 +263,8 @@ def nntc_docker(latest_tpu_perf_whl):
         tty=True)
 
     # Pack bmodels for runtime jobs
-    model_tar = f'NNTC_{uuid.uuid4()}.tar'
+    toolchain_version = get_toolchain_cmtId(nntc_dir)
+    model_tar = f'{toolchain_version}_{uuid.uuid4()}.tar'
     for target in ['BM1684', 'BM1684X']:
         upload_bmodel(target, model_tar, f'<(find out*_{target} -name \'*.compilation\' 2>/dev/null)')
     write_github_output('NNTC_MODEL_TAR', model_tar)
@@ -309,12 +322,13 @@ def mlir_docker(latest_tpu_perf_whl):
     logging.info(f'MLIR container {mlir_container.name}')
 
     # Remove old outputs
-    mlir_container.exec_run(f'bash -c "rm -rf *out*"', tty=True)
+    mlir_container.exec_run(f'bash -c "rm -rf *out* *_failed_cases.json"', tty=True)
 
     yield dict(docker=client, container=mlir_container)
 
     # Pack bmodels for runtime jobs
-    model_tar = f'MLIR_{uuid.uuid4()}.tar'
+    toolchain_version = get_toolchain_cmtId(mlir_dir)
+    model_tar = f'{toolchain_version}_{uuid.uuid4()}.tar'
     for target in ['BM1684', 'BM1684X']:
         relative_fns = set()
         for dirpath, dirnames, filenames in os.walk(f'mlir_out_{target}'):
@@ -330,9 +344,9 @@ def mlir_docker(latest_tpu_perf_whl):
             f.write('\n'.join(relative_fns))
         upload_bmodel(target, model_tar, list_fn)
     write_github_output('MLIR_MODEL_TAR', model_tar)
-
+    
     # Chown so we can delete them later
-    dirs_to_remove = ['*.tar', '*out*', 'data', '*list.txt', '.tar.gz']
+    dirs_to_remove = ['*.tar', '*out*', 'data', '*list.txt', '*.tar.gz']
     mlir_container.exec_run(
         f'bash -c "chown -R {os.getuid()} {" ".join(dirs_to_remove)}"',
         tty=True)
@@ -517,7 +531,7 @@ def precision_dependencies(latest_tpu_perf_whl):
 
 @pytest.fixture(scope='session')
 def mlir_runtime(target, case_list):
-    dirs_to_remove = ['*.tar', '*out*', 'data', '.tar.gz']
+    dirs_to_remove = ['*.tar', '*out*', 'data', '*.tar.gz']
     for d in dirs_to_remove:
         remove_tree(d)
 
@@ -537,7 +551,7 @@ def mlir_runtime(target, case_list):
 
 @pytest.fixture(scope='session')
 def nntc_runtime(target, case_list):
-    dirs_to_remove = ['*.tar', '*out*', 'data', '.tar.gz']
+    dirs_to_remove = ['*.tar', '*out*', 'data', '*.tar.gz']
     for d in dirs_to_remove:
         remove_tree(d)
 

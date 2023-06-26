@@ -10,4 +10,6 @@ def test_mlir_efficiency(target, mlir_env, get_imagenet_val, get_cifar100, get_c
         logging.info(f'Skip efficiency test')
         return
 
-    container_run(mlir_env, f'python3 -m tpu_perf.build {mlir_env["case_list"]} --outdir mlir_out_{target} --target {target} --mlir')
+    container_run(mlir_env, f'python3 -m tpu_perf.build {mlir_env["case_list"]} \
+        --outdir mlir_out_{target} --target {target} --mlir --report {target}_failed_cases.json')
+

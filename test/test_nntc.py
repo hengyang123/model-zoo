@@ -28,7 +28,8 @@ def test_nntc_efficiency(target, nntc_env, get_imagenet_val, get_cifar100, get_c
         return
 
     # Build for efficiency test
-    container_run(nntc_env, f'python3 -m tpu_perf.build --time {nntc_env["case_list"]} --outdir out_eff_{target} --target {target}')
+    container_run(nntc_env, f'python3 -m tpu_perf.build --time {nntc_env["case_list"]} \
+        --outdir out_eff_{target} --target {target} --report {target}_failed_cases.json')
 
 @pytest.mark.build
 @pytest.mark.nntc
@@ -39,4 +40,5 @@ def test_nntc_accuracy(target, nntc_env, get_imagenet_val, get_cifar100, get_coc
         return
 
     # Build for accuracy test
-    container_run(nntc_env, f'python3 -m tpu_perf.build {nntc_env["case_list"]} --outdir out_acc_{target} --target {target}')
+    container_run(nntc_env, f'python3 -m tpu_perf.build {nntc_env["case_list"]} \
+        --outdir out_acc_{target} --target {target} --report {target}_failed_cases.json')

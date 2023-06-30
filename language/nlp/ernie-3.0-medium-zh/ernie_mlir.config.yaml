@@ -37,6 +37,7 @@ mlir_calibration:
     --dataset $(CAIL2019_divorce_cali_set)
     --input_num 20
     -o $(workdir)/$(name).cali_table
+    --debug_cmd use_percentile9999
 
 BM1684X:
   deploy:
@@ -48,13 +49,12 @@ BM1684X:
         --tolerance 0.99,0.99
         --model $(workdir)/$(name)_bm1684x_f32.bmodel
     - model_deploy.py --mlir $(workdir)/transformed.mlir
-        --asymmetric
         --quantize INT8
         --calibration_table $(workdir)/$(name).cali_table
         --quantize_table $(home)/ernie-3.0-medium-zh.qtable
         --chip $(target)
         --model $(workdir)/$(name)_bm1684x_int8_asym.bmodel
-        --tolerance 0.8,0.5
+        --tolerance 0.99,0.92
         --test_input $(workdir)/$(name)_in_f32.npz
         --test_reference $(workdir)/$(name)_top_outputs.npz
 

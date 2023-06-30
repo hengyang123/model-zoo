@@ -6,3 +6,16 @@
 # op_name   quantize_mode
 tmp_1_Equal F16
 p2o.Mul.1_Mul F16
+p2o.Add.17_Add F16
+p2o.Add.45_Add F16
+p2o.Add.73_Add F16
+p2o.Add.101_Add F16
+p2o.Add.129_Add F16
+p2o.Add.157_Add F16
+p2o.Add.3_Add F16
+p2o.Add.5_Add F16
+p2o.Add.1_Add F16
+p2o.Add.15_Add F16
+p2o.Add.31_Add F16
+p2o.Add.33_Add F16
+p2o.MatMul.7_MatMul F16

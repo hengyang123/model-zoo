@@ -1,0 +1,12 @@
+# genetated time: 2023-06-19 16:21:12.526171
+# sample number: 2
+# chip: bm1684  mix_mode: F32
+# number of F32 layer: 6
+###
+# op_name   quantize_mode
+304_Conv F32
+316_Reshape F32
+317_Transpose F32
+332_Concat F32
+334_Add F32
+344_LayerNormalization F32

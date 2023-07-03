@@ -37,7 +37,7 @@ BM1684X:
         --model $(workdir)/$(name)_bm1684x_f32.bmodel
     - model_deploy.py --mlir $(workdir)/transformed.mlir
         --quantize INT8
-        --calibration_table $(home)/cali_table
+        --calibration_table $(workdir)/$(name).calitable
         --quant_input
         --quant_output
         --asymmetric

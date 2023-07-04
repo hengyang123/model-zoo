@@ -147,7 +147,7 @@ jobs:
 
       - name: Post failed cases
         if: ${{ failure() == 'true' &&
-                (inputs.cases == 'true' || github.event_name == 'schedule') }}
+                (inputs.blame == 'true' || github.event_name == 'schedule') }}
         run: |
           test/post_failed_cases.sh --sdk \
               ${{ steps.test.outputs.MLIR_MODEL_TAR }}
@@ -253,7 +253,7 @@ jobs:
 
       - name: Post failed cases
         if: ${{ failure() == 'true' &&
-          (inputs.cases == 'true' || github.event_name == 'schedule') }}
+          (inputs.blame == 'true' || github.event_name == 'schedule') }}
         run: |
           test/post_failed_cases.sh --sdk \
               ${{ steps.test.outputs.NNTC_MODEL_TAR }}

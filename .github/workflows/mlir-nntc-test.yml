@@ -146,7 +146,7 @@ jobs:
         id: test
 
       - name: Post failed cases
-        if: ${{ failure() == 'true' &&
+        if: ${{ failure() &&
                 (inputs.blame == 'true' || github.event_name == 'schedule') }}
         run: |
           test/post_failed_cases.sh --sdk \
@@ -252,7 +252,7 @@ jobs:
         id: test
 
       - name: Post failed cases
-        if: ${{ failure() == 'true' &&
+        if: ${{ failure() &&
           (inputs.blame == 'true' || github.event_name == 'schedule') }}
         run: |
           test/post_failed_cases.sh --sdk \

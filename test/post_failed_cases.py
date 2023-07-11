@@ -39,12 +39,12 @@ def post_failed_cases(sdk, fn):
     json_param = {
         'JSON_PARAM': params
     }
-    print(json_param)
 
-    url = os.environ.get('JENKINS_URL')
+    url = 'http://172.28.142.24:8092/job/model-zoo-regression/buildWithParameters'
     auth_info = os.environ.get('JENKINS_AUTH').split(':')
     auth = (auth_info[0], auth_info[1])
-    logging.info('Post failed cases to jenkins!')
+    print('Post failed cases to jenkins: ', url)
+    print("json_param: ", json_param)
     response = requests.post(url, auth=auth, params=json_param)
 
 def main():

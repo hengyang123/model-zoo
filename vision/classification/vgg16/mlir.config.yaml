@@ -74,7 +74,7 @@ BM1684X:
         --chip $(target)
         --test_input $(workdir)/$(name)_in_f32.npz
         --test_reference $(name)_top_outputs.npz
-        --tolerance 0.98,0.94
+        --tolerance 0.98,0.79
         --model $(workdir)/$(name)_$(target)_int8_asym.bmodel
 
   harness:

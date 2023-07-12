@@ -40,14 +40,6 @@ BM1684X:
       --model $(workdir)/$(name)_$(target)_f16.bmodel
 
     - model_deploy.py  --mlir $(workdir)/$(name).mlir
-      --quantize BF16
-      --chip $(target)
-      --tolerance 0.95,0.85
-      --test_input $(workdir)/$(name)_in_f32.npz
-      --test_reference $(workdir)/$(name)_top_outputs.npz
-      --model $(workdir)/$(name)_$(target)_Bf16.bmodel
-
-    - model_deploy.py  --mlir $(workdir)/$(name).mlir
       --quantize INT8
       --chip $(target)
       --tolerance 0.85,0.40
@@ -65,9 +57,6 @@ BM1684X:
         model_type: "onnx"
       - name: FP16
         bmodel: $(workdir)/$(name)_$(target)_f16.bmodel
-        model_type: "onnx"
-      - name: BF16
-        bmodel: $(workdir)/$(name)_$(target)_BF16.bmodel
         model_type: "onnx"
       - name: INT8
         bmodel: $(workdir)/$(name)_$(target)_int8_sym.bmodel

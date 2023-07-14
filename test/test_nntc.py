@@ -10,13 +10,20 @@ def make_lmdb(nntc_env):
     cmd = 'pip3 install -r /workspace/requirements.txt -i https://mirrors.cloud.tencent.com/pypi/simple'
     container = nntc_env['container']
     logging.info(cmd)
-    ret, output = container.exec_run(
-        f'bash -c "{cmd}"',
-        tty=True)
-    if ret != 0:
-        output = output.decode()
-        logging.error(f'------>\n{output}')
-    assert ret == 0
+
+    for i in range(4):
+        try:
+            ret, output = container.exec_run(
+                f'bash -c "{cmd}"', tty=True)
+            break
+        except:
+            if i == 0:
+                logging.info(f'Attempt pip3 install -r /workspace/requirements.txt {i}th time!')
+            elif i == 3:
+                output = output.decode()
+                logging.error(f'------>\n{output}')
+                assert ret == 0
+
     container_run(nntc_env, f'python3 -m tpu_perf.make_lmdb {nntc_env["case_list"]}')
 
 @pytest.mark.build

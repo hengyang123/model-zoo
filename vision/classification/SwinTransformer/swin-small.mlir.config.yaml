@@ -1,0 +1,89 @@
+---
+name: swin_s
+pure_name: swin_s
+
+gops: [17.647]
+shapes:
+  - [1, 3, 224, 224]
+
+model: $(home)/swin_s.onnx
+
+time_rountds: 50
+time: true
+precision: true
+
+mlir_transform: model_transform.py
+  --model_name $(name)
+  --model_def $(model)
+  --tolerance 0.99,0.9
+  --mean 123.68,116.78,103.94
+  --test_input $(root)/dataset/samples/cat.jpg
+  --scale 0.017,0.017,0.017
+  --pixel_format rgb
+  --resize_dims 256,256
+  --keep_aspect_ratio
+  --input_shapes [$(shape_param)]
+  --test_result $(workdir)/$(pure_name)_top_outputs.npz
+  --mlir $(workdir)/$(pure_name).mlir
+
+BM1684:
+  deploy:
+    - model_deploy.py
+      --mlir $(workdir)/$(pure_name).mlir
+      --quantize F32
+      --chip $(target)
+      --test_input $(workdir)/$(pure_name)_in_f32.npz
+      --test_reference $(workdir)/$(pure_name)_top_outputs.npz
+      --model $(workdir)/$(pure_name)_$(target)_f32.bmodel
+
+  harness:
+    type: topk
+    args:
+      - name: F32
+        bmodel: $(workdir)/$(pure_name)_$(target)_f32.bmodel
+
+BM1684X:
+  deploy:
+    - model_deploy.py
+      --mlir $(workdir)/$(pure_name).mlir
+      --quantize F32
+      --chip $(target)
+      --test_input $(workdir)/$(pure_name)_in_f32.npz
+      --test_reference $(workdir)/$(pure_name)_top_outputs.npz
+      --model $(workdir)/$(pure_name)_$(target)_f32.bmodel
+
+    - model_deploy.py
+      --mlir $(workdir)/$(pure_name).mlir
+      --quantize F16
+      --chip $(target)
+      --test_input $(workdir)/$(pure_name)_in_f32.npz
+      --test_reference $(workdir)/$(pure_name)_top_outputs.npz
+      --model $(workdir)/$(pure_name)_$(target)_f16.bmodel
+
+    - model_deploy.py
+      --mlir $(workdir)/$(pure_name).mlir
+      --quantize BF16
+      --chip $(target)
+      --test_input $(workdir)/$(pure_name)_in_f32.npz
+      --test_reference $(workdir)/$(pure_name)_top_outputs.npz
+      --model $(workdir)/$(pure_name)_$(target)_bf16.bmodel
+
+  harness:
+    type: topk
+    args:
+      - name: F32
+        bmodel: $(workdir)/$(pure_name)_$(target)_f32.bmodel
+      - name: F16
+        bmodel: $(workdir)/$(pure_name)_$(target)_f16.bmodel
+      - name: BF16
+        bmodel: $(workdir)/$(pure_name)_$(target)_bf16.bmodel
+
+dataset:
+  image_path: $(imagenet2012_val_set)
+  image_label: $(imagenet2012_caffe_val_ground_truth)
+  mean: [123.68, 116.78, 103.94]
+  scale: [0.017, 0.017, 0.017]
+  resize_dims: 256
+  size: 224
+  trans: true
+  bgr2rgb: true

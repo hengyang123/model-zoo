@@ -150,6 +150,8 @@ python3 .github/workflows/check.py
 |StableDiffusion\_decode          |[vision/generative/stable\_diffusion](vision/generative/stable_diffusion)                             |                    |:white\_check\_mark:|
 |StableDiffusion\_text\_encoder   |[vision/generative/stable\_diffusion](vision/generative/stable_diffusion)                             |                    |:white\_check\_mark:|
 |StableDiffusion\_unet            |[vision/generative/stable\_diffusion](vision/generative/stable_diffusion)                             |                    |:white\_check\_mark:|
+|swin\_b                          |[vision/classification/SwinTransformer](vision/classification/SwinTransformer)                        |                    |:white\_check\_mark:|
+|swin\_s                          |[vision/classification/SwinTransformer](vision/classification/SwinTransformer)                        |                    |:white\_check\_mark:|
 |swin\_t                          |[vision/classification/SwinTransformer](vision/classification/SwinTransformer)                        |:white\_check\_mark:|:white\_check\_mark:|
 |tpu-mlir\_S-DCNet\_SHA           |[vision/visual-counting/S-DCNet](vision/visual-counting/S-DCNet)                                      |                    |:white\_check\_mark:|
 |tpu-mlir\_S-DCNet\_SHB           |[vision/visual-counting/S-DCNet](vision/visual-counting/S-DCNet)                                      |                    |:white\_check\_mark:|

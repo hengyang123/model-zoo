@@ -13,6 +13,8 @@ their paper in 2021.
 |Model          |Download                       |Top-1 accuracy (%) |Top-5 accuracy (%) |
 |---------------|:------------------------------|:------------------|:------------------|
 |Swin-Tiny      |[28 MB](swin_t.onnx)           |80.9               |96.0               |
+|Swin-Small     |[50 MB](swin_t.onnx)           |83.2               |96.2               |
+|Swin-Base      |[88 MB](swin_t.onnx)           |83.5               |96.5               |
 
 ## Dataset
 

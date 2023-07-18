@@ -244,7 +244,7 @@ def nntc_docker(latest_tpu_perf_whl):
             f.write(f'NNTC_CONTAINER={nntc_container.name}\n')
 
     # Remove old outputs
-    nntc_container.exec_run(f'bash -c "rm -rf *out* *_failed_cases.json"', tty=True)
+    nntc_container.exec_run(f'bash -c "rm -rf *out* *_cases_status.json"', tty=True)
 
     logging.info(f'Setting up NNTC')
     ret, _ = nntc_container.exec_run(
@@ -335,7 +335,7 @@ def mlir_docker(latest_tpu_perf_whl):
     logging.info(f'MLIR container {mlir_container.name}')
 
     # Remove old outputs
-    mlir_container.exec_run(f'bash -c "rm -rf *out* *_failed_cases.json"', tty=True)
+    mlir_container.exec_run(f'bash -c "rm -rf *out* *_cases_status.json"', tty=True)
 
     yield dict(docker=client, container=mlir_container)
 

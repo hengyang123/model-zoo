@@ -13,12 +13,11 @@ def make_lmdb(nntc_env):
 
     for i in range(4):
         try:
-            ret, output = container.exec_run(
-                f'bash -c "{cmd}"', tty=True)
+            ret, output = container.exec_run(f'bash -c "{cmd}"', tty=True)
             break
         except:
             if i == 0:
-                logging.info(f'Attempt pip3 install -r /workspace/requirements.txt {i}th time!')
+                logging.info(f'Try pip3 install -r /workspace/requirements.txt a {i}th time!')
             elif i == 3:
                 output = output.decode()
                 logging.error(f'------>\n{output}')
@@ -36,7 +35,7 @@ def test_nntc_efficiency(target, nntc_env, get_val_dataset):
 
     # Build for efficiency test
     container_run(nntc_env, f'python3 -m tpu_perf.build --time {nntc_env["case_list"]} \
-        --outdir out_eff_{target} --target {target} --report {target}_failed_cases.json')
+        --outdir out_eff_{target} --target {target} --report nntc_{target}_eff_cases_status.json')
 
 @pytest.mark.build
 @pytest.mark.nntc
@@ -48,4 +47,4 @@ def test_nntc_accuracy(target, nntc_env, get_val_dataset, make_lmdb):
 
     # Build for accuracy test
     container_run(nntc_env, f'python3 -m tpu_perf.build {nntc_env["case_list"]} \
-        --outdir out_acc_{target} --target {target} --report {target}_failed_cases.json')
+        --outdir out_acc_{target} --target {target} --report nntc_{target}_acc_cases_status.json')

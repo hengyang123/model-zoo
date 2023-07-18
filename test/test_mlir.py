@@ -11,5 +11,5 @@ def test_mlir_efficiency(target, mlir_env, get_val_dataset):
         return
 
     container_run(mlir_env, f'python3 -m tpu_perf.build {mlir_env["case_list"]} \
-        --outdir mlir_out_{target} --target {target} --mlir --report {target}_failed_cases.json')
+        --outdir mlir_out_{target} --target {target} --mlir --report mlir_{target}_acc_cases_status.json')
 

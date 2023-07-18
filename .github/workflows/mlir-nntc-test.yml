@@ -150,7 +150,8 @@ jobs:
                 (inputs.blame == 'true' || github.event_name == 'schedule') }}
         run: |
           test/post_failed_cases.sh --sdk \
-              ${{ steps.test.outputs.MLIR_MODEL_TAR }}
+              ${{ steps.test.outputs.MLIR_MODEL_TAR }} \
+              --git_job_id ${{ github.run_id }}
 
       - name: Cleanup
         if: ${{ cancelled() || failure() }}

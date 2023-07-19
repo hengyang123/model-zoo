@@ -1,0 +1,58 @@
+---
+
+name: WenetSpeechDecoder
+
+gops: [24.71427897]
+
+shapes:
+  - [[1, 350, 512], [1], [1, 10, 350], [1, 10], [1, 10, 350], [1, 10]]
+
+model: $(home)/wenetspeech-decoder.onnx
+
+runtime_cmp: false
+
+excepts: "/decoder/left_decoder/decoders.0/self_attn/Where_output_0_Where,\
+  /decoder/left_decoder/decoders.1/self_attn/Where_output_0_Where,\
+  /decoder/left_decoder/decoders.2/self_attn/Where_output_0_Where,\
+  /decoder/right_decoder/decoders.0/self_attn/Where_output_0_Where,\
+  /decoder/right_decoder/decoders.1/self_attn/Where_output_0_Where,\
+  /decoder/right_decoder/decoders.2/self_attn/Where_output_0_Where,\
+  beam_log_probs_idx_TopK"
+
+mlir_transform:
+  model_transform.py
+    --model_name $(name)
+    --model_def $(model)
+    --test_input $(root)/dataset/npz_input/wenet_decoder.npz
+    --input_shapes [$(shape_param)]
+    --excepts $(excepts)
+    --test_result $(workdir)/$(name)_top_outputs.npz
+    --mlir $(workdir)/transformed.mlir
+
+BM1684:
+  deploy:
+    - model_deploy.py  --mlir $(workdir)/transformed.mlir
+        --quantize F32
+        --chip $(target)
+        --test_input $(workdir)/$(name)_in_f32.npz
+        --test_reference $(workdir)/$(name)_top_outputs.npz
+        --tolerance 0.99,0.99
+        --model $(workdir)/$(name)_bm1684_f32.bmodel
+
+BM1684X:
+  +deploy:
+    - model_deploy.py  --mlir $(workdir)/transformed.mlir
+        --quantize F32
+        --chip $(target)
+        --test_input $(workdir)/$(name)_in_f32.npz
+        --test_reference $(workdir)/$(name)_top_outputs.npz
+        --tolerance 0.99,0.99
+        --model $(workdir)/$(name)_bm1684x_f32.bmodel
+    - model_deploy.py  --mlir $(workdir)/transformed.mlir
+          --quantize F16
+          --chip $(target)
+          --test_input $(workdir)/$(name)_in_f32.npz
+          --quantize_table $(home)/decoder_qtable
+          --test_reference $(workdir)/$(name)_top_outputs.npz
+          --tolerance 0.99,0.99
+          --model $(workdir)/$(name)_bm1684x_f16.bmodel

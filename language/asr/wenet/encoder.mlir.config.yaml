@@ -1,31 +1,26 @@
 ---
 
-name: WenetDecoder
+name: WenetEncoder
 
-gops: [96.7]
+gops: [1.6]
 
 shapes:
-  - [[1, 350, 256], [1], [1, 10, 350], [1, 10], [1, 10, 350], [1, 10]]
+  - [[1, 67, 80], [1], [1, 1], [1, 12, 4, 80, 128], [1, 12, 256, 7], [1, 1, 80]]
 
-model: $(home)/decoder.onnx
+model: $(home)/encoder.onnx
 
 runtime_cmp: false
-
-excepts: "472_Where,588_Where,723_Where,839_Where,974_Where,1090_Where,\
- 1329_Where,1445_Where,1580_Where,1696_Where,1831_Where,1947_Where"
 
 mlir_transform:
   model_transform.py
     --model_name $(name)
     --model_def $(model)
-    --test_input $(root)/dataset/npz_input/decoder_input.npz
+    --test_input $(root)/dataset/npz_input/encoder_input.npz
     --input_shapes [$(shape_param)]
-    --excepts $(excepts)
     --test_result $(workdir)/$(name)_top_outputs.npz
     --mlir $(workdir)/transformed.mlir
 
 BM1684:
-  time_rounds: 100
   deploy:
     - model_deploy.py  --mlir $(workdir)/transformed.mlir
         --quantize F32

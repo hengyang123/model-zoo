@@ -22,8 +22,18 @@ mlir_transform:
     --mlir $(workdir)/transformed.mlir
     --output_names "encoder_out,encoder_out_lens,ctc_log_probs"
 
-BM1684X:
+BM1684:
   deploy:
+    - model_deploy.py  --mlir $(workdir)/transformed.mlir
+        --quantize F32
+        --chip $(target)
+        --test_input $(workdir)/$(name)_in_f32.npz
+        --test_reference $(workdir)/$(name)_top_outputs.npz
+        --tolerance 0.99,0.99
+        --model $(workdir)/$(name)_bm1684_f32.bmodel
+
+BM1684X:
+  +deploy:
     - model_deploy.py  --mlir $(workdir)/transformed.mlir
         --quantize F32
         --chip $(target)

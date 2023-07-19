@@ -1,0 +1,49 @@
+---
+
+name: centernet_onnx
+gops: 58.007
+
+shapes:
+  - [1, 3, 512, 512]
+
+model: $(home)/centernet_dyn.onnx
+
+mlir_transform:
+  model_transform.py
+    --model_name $(name)
+    --model_def $(model)
+    --test_input $(root)/dataset/samples/cat.jpg
+    --input_shapes [$(shape_param)]
+    --keep_aspect_ratio
+    --mean 0.0,0.0,0.0
+    --scale 0.0039216,0.0039216,0.0039216
+    --pixel_format rgb
+    --test_result $(name)_top_outputs.npz
+    --mlir $(workdir)/transformed.mlir
+
+mlir_calibration:
+  run_calibration.py $(workdir)/transformed.mlir
+    --dataset $(coco2017_mlir_cali_set)
+    --input_num 100
+    -o $(workdir)/$(name).cali_table
+
+BM1684X:
+  deploy:
+    - model_deploy.py  --mlir $(workdir)/transformed.mlir
+        --quantize F32
+        --chip bm1684x
+        --test_input $(workdir)/$(name)_in_f32.npz
+        --test_reference $(name)_top_outputs.npz
+        --tolerance 0.99,0.99
+        --model $(workdir)/$(name)_bm1684x_f32.bmodel
+    - model_deploy.py --mlir $(workdir)/transformed.mlir
+        --quantize INT8
+        --quantize_table $(home)/dlav0_qtable 
+        --calibration_table $(workdir)/$(name).cali_table
+        --quant_input
+        --quant_output
+        --chip bm1684x
+        --test_input $(workdir)/$(name)_in_f32.npz
+        --test_reference $(name)_top_outputs.npz
+        --tolerance 0.80,0.30
+        --model $(workdir)/$(name)_bm1684x_int8_sym.bmodel

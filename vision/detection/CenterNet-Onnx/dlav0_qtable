@@ -1,0 +1,12 @@
+# genetated time: 2023-03-29 21:36:17.691538
+# sample number: 10
+# chip: bm1684x  mix_mode: F16
+# number of F16 layer: 6
+###
+# op_name   quantize_mode
+/hm/hm.1/Relu_output_0_Relu F16
+/hm/hm.2/Conv_output_0_Conv F16
+/wh/wh.1/Relu_output_0_Relu F16
+/wh/wh.2/Conv_output_0_Conv F16
+/reg/reg.2/Conv_output_0_Conv F16
+515_Concat F16

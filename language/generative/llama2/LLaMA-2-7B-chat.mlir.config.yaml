@@ -1,0 +1,32 @@
+---
+
+name: LLaMA-2-7B-chat
+gops: 1435.898
+shapes:
+  - [[1, 2048], [1, 2048], [1, 2048]]
+
+model: $(home)/LLaMA-2-7B-chat.onnx
+time: true
+
+excepts: "/model/Where_2_output_0_Where,\
+      /model/Add_output_0_Add,\
+      /model/layers.0/self_attn/Add_2_output_0_Add"
+
+mlir_transform: model_transform.py
+  --model_name $(name)
+  --model_def $(home)/$(name).onnx
+  --test_input $(home)/$(name)_in.npz
+  --input_shapes [$(shape_param)]
+  --test_result $(workdir)/$(name)_top_outputs.npz
+  --mlir $(workdir)/$(name).mlir
+
+BM1684X:
+  deploy:
+    - model_deploy.py --mlir $(workdir)/$(name).mlir
+      --quantize F16
+      --chip $(target)
+      --tolerance 0.99,0.99
+      --test_input $(workdir)/$(name)_in_f32.npz
+      --test_reference $(workdir)/$(name)_top_outputs.npz
+      --model $(workdir)/$(name)_$(target)_f16.bmodel
+      --excepts $(excepts)

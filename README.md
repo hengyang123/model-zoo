@@ -220,6 +220,7 @@ python3 .github/workflows/check.py
 |ernie-3.0-medium-zh               |[language/nlp/ernie-3.0-medium-zh](language/nlp/ernie-3.0-medium-zh)          |                    |:white\_check\_mark:|
 |gpt2                              |[language/generative/gpt2](language/generative/gpt2)                          |:white\_check\_mark:|                    |
 |GRU                               |[language/nlp/GRU](language/nlp/GRU)                                          |:white\_check\_mark:|:white\_check\_mark:|
+|LLaMA-2-7B-chat                   |[language/generative/llama2](language/generative/llama2)                      |                    |:white\_check\_mark:|
 |LLaMA-7B                          |[language/generative/llama](language/generative/llama)                        |                    |:white\_check\_mark:|
 |mobilebert-tflite                 |[language/nlp/mobilebert\_tflite](language/nlp/mobilebert_tflite)             |                    |:white\_check\_mark:|
 |ScoringIds                        |[language/asr/conformer](language/asr/conformer)                              |:white\_check\_mark:|                    |

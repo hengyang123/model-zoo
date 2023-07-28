@@ -49,6 +49,7 @@ python3 .github/workflows/check.py
 
 |Model                            |Path                                                                                                  |NNTC                |MLIR                |
 |:-                               |:-                                                                                                    |:-                  |:-                  |
+|adaface                          |[vision/recognition/adaface](vision/recognition/adaface)                                              |                    |:white\_check\_mark:|
 |alexnet                          |[vision/classification/AlexNet-Caffe](vision/classification/AlexNet-Caffe)                            |:white\_check\_mark:|                    |
 |arcface                          |[vision/recognition/arcface](vision/recognition/arcface)                                              |                    |:white\_check\_mark:|
 |big\_transfer                    |[vision/classification/big\_transfer\_mlir](vision/classification/big_transfer_mlir)                  |                    |:white\_check\_mark:|

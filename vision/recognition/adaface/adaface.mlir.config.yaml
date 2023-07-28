@@ -1,0 +1,70 @@
+---
+name: adaface
+pure_name: adaface
+
+gops: [24.18]
+shapes:
+  - [1, 3, 112, 112]
+
+model: $(home)/adaface.onnx
+
+cali_input_key: cali_adaface
+
+time_rountds: 50
+time: true
+precision: true
+
+mlir_transform: model_transform.py
+  --model_name $(name)
+  --model_def $(model)
+  --tolerance 0.99,0.9
+  --test_input $(root)/dataset/samples/adaface_aligned.jpg
+  --mean 127.5,127.5,127.5
+  --scale 0.00784,0.00784,0.00784
+  --pixel_format bgr
+  --input_shapes [$(shape_param)]
+  --test_result $(workdir)/$(pure_name)_top_outputs.npz
+  --mlir $(workdir)/$(pure_name).mlir
+
+mlir_calibration: run_calibration.py $(workdir)/$(pure_name).mlir
+  --dataset $(root)/dataset/adaface/$(cali_input_key)
+  --input_num 10
+  -o $(workdir)/$(pure_name)_cali_table
+
+BM1684X:
+  deploy:
+    - model_deploy.py
+      --mlir $(workdir)/$(pure_name).mlir
+      --quantize F32
+      --chip $(target)
+      --test_input $(workdir)/$(pure_name)_in_f32.npz
+      --test_reference $(workdir)/$(pure_name)_top_outputs.npz
+      --model $(workdir)/$(pure_name)_$(target)_f32.bmodel
+
+    - model_deploy.py
+      --mlir $(workdir)/$(pure_name).mlir
+      --quantize F16
+      --chip $(target)
+      --quantize_table $(home)/$(name)_qtable
+      --test_input $(workdir)/$(pure_name)_in_f32.npz
+      --test_reference $(workdir)/$(pure_name)_top_outputs.npz
+      --model $(workdir)/$(pure_name)_$(target)_f16.bmodel
+
+    - model_deploy.py
+      --mlir $(workdir)/$(pure_name).mlir
+      --quantize BF16
+      --chip $(target)
+      --test_input $(workdir)/$(pure_name)_in_f32.npz
+      --test_reference $(workdir)/$(pure_name)_top_outputs.npz
+      --model $(workdir)/$(pure_name)_$(target)_bf16.bmodel
+
+    - model_deploy.py
+      --mlir $(workdir)/$(pure_name).mlir
+      --quantize INT8
+      --chip $(target)
+      --tolerance 0.8,0.4
+      --test_input $(workdir)/$(pure_name)_in_f32.npz
+      --test_reference $(workdir)/$(pure_name)_top_outputs.npz
+      --model $(workdir)/$(pure_name)_$(target)_int8_sym.bmodel
+      --quantize_table $(home)/$(name)_qtable
+      --calibration_table $(workdir)/$(pure_name)_cali_table

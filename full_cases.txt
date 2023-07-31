@@ -95,6 +95,7 @@ vision/classification/EfficientNet-B1
 vision/classification/EfficientNet-B4
 vision/classification/EfficientNet-B5
 vision/classification/EfficientNet-B7
+vision/classification/HRNet-Onnx
 vision/classification/HRNet-Torch
 vision/detection/vggssd_300
 vision/detection/CenterNet-Torch

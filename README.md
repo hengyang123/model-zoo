@@ -78,6 +78,7 @@ python3 .github/workflows/check.py
 |face\_alignment                  |[vision/recognition/face\_alignment](vision/recognition/face_alignment)                               |                    |:white\_check\_mark:|
 |facenet                          |[vision/recognition/facenet](vision/recognition/facenet)                                              |:white\_check\_mark:|                    |
 |GOTURN                           |[vision/tracking/GOTURN-Caffe](vision/tracking/GOTURN-Caffe)                                          |:white\_check\_mark:|                    |
+|hrnet                            |[vision/classification/HRNet-Onnx](vision/classification/HRNet-Onnx)                                  |                    |:white\_check\_mark:|
 |HRNet                            |[vision/classification/HRNet-Torch](vision/classification/HRNet-Torch)                                |:white\_check\_mark:|                    |
 |huggingface-resnet50             |[vision/classification/resnet50-v1.5](vision/classification/resnet50-v1.5)                            |:white\_check\_mark:|                    |
 |inception\_resnet\_v2            |[vision/classification/inception\_resnet\_v2](vision/classification/inception_resnet_v2)              |:white\_check\_mark:|                    |

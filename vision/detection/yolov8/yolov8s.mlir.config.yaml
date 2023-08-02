@@ -1,9 +1,10 @@
 ---
 
 name: yolov8s
-gops: [26.899620145]
+gops: [26.899620145, 52.333]
 shapes:
   - [1, 3, 640, 640]
+  - [4, 3, 640, 640]
 
 precision: true
 
@@ -30,40 +31,59 @@ BM1684X:
   deploy:
     - model_deploy.py  --mlir $(workdir)/transformed.mlir
         --quantize F32
-        --chip bm1684x
+        --chip $(target)
         --test_input $(workdir)/$(name)_in_f32.npz
         --test_reference $(name)_top_outputs.npz
         --tolerance 0.99,0.99
-        --model $(workdir)/$(name)_bm1684x_f32.bmodel
+        --model $(workdir)/$(name)_$(target)_f32.bmodel
     - model_deploy.py --mlir $(workdir)/transformed.mlir
         --quantize INT8
         --calibration_table $(workdir)/$(name).scali_table
         --quantize_table $(home)/q_table
-        --chip bm1684x
+        --chip $(target)
         --test_input $(workdir)/$(name)_in_f32.npz
         --test_reference $(name)_top_outputs.npz
         --tolerance 0.99,0.90
-        --model $(workdir)/$(name)_bm1684x_int8_sym.bmodel
+        --model $(workdir)/$(name)_$(target)_int8_sym.bmodel
     - model_deploy.py --mlir $(workdir)/transformed.mlir
         --quantize INT8
         --asymmetric
         --calibration_table $(workdir)/$(name).scali_table
         --quantize_table $(home)/q_table
-        --chip bm1684x
+        --chip $(target)
         --test_input $(workdir)/$(name)_in_f32.npz
         --test_reference $(name)_top_outputs.npz
         --tolerance 0.99,0.90
-        --model $(workdir)/$(name)_bm1684x_int8_asym.bmodel
+        --model $(workdir)/$(name)_$(target)_int8_asym.bmodel
 
-  dataset:
-    imagedir: $(coco2017_val_set)
-    anno: $(coco2017_anno)/instances_val2017.json
-    yolov8_nms: True
+BM1684:
+  deploy:
+    - model_deploy.py  --mlir $(workdir)/transformed.mlir
+        --quantize F32
+        --chip $(target)
+        --test_input $(workdir)/$(name)_in_f32.npz
+        --test_reference $(name)_top_outputs.npz
+        --tolerance 0.99,0.99
+        --model $(workdir)/$(name)_$(target)_f32.bmodel
+    - model_deploy.py --mlir $(workdir)/transformed.mlir
+        --quantize INT8
+        --calibration_table $(workdir)/$(name).scali_table
+        --quantize_table $(home)/1684q_table
+        --chip $(target)
+        --test_input $(workdir)/$(name)_in_f32.npz
+        --test_reference $(name)_top_outputs.npz
+        --tolerance 0.0,0.0
+        --model $(workdir)/$(name)_$(target)_int8_sym.bmodel
 
-  harness:
-    type: yolo
-    args:
-      - name: FP32
-        bmodel: $(workdir)/$(name)_bm1684x_f32.bmodel
-      - name: INT8
-        bmodel: $(workdir)/$(name)_bm1684x_int8_sym.bmodel
+dataset:
+imagedir: $(coco2017_val_set)
+anno: $(coco2017_anno)/instances_val2017.json
+yolov8_nms: True
+
+harness:
+  type: yolo
+  args:
+    - name: FP32
+      bmodel: $(workdir)/$(name)_$(target)_f32.bmodel
+    - name: INT8
+      bmodel: $(workdir)/$(name)_$(target)_int8_sym.bmodel

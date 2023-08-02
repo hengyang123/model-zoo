@@ -23,7 +23,6 @@ The OpenPose human pose recognition project can realize pose estimation such as 
 
 * [OpenPose: Realtime Multi-Person 2D Pose Estimation using Part Affinity Fields](https://arxiv.org/abs/1812.08008)
 * [CMU-Perceptual-Computing-Lab/openpose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)
-* [training_log](http://posefs1.perception.cs.cmu.edu/OpenPose/models/pose/body_25/training_log.txt)
 
 ## License
 

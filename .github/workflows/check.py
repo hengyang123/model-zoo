@@ -1,6 +1,10 @@
+import yaml
+import re
 import os
 
 ignores = ['node_modules']
+
+
 def walk(path):
     for fn in os.listdir(path):
         if fn in ignores:
@@ -11,6 +15,7 @@ def walk(path):
                 yield p
         elif os.path.isfile(sub):
             yield sub
+
 
 def table_should_be_aligned(fn, lines):
     in_code = False
@@ -38,6 +43,7 @@ def table_should_be_aligned(fn, lines):
             assert line.count('|') == bar_count, \
                 f'Vertical bar count error in {fn}:{lineno}'
 
+
 def check_title_syntax(path, lines):
     in_code = False
     got_one = False
@@ -59,6 +65,7 @@ def check_title_syntax(path, lines):
     assert got_one, \
         f'Should have a title with single # in {path}'
 
+
 must_include_titles = set([
     'Description',
     'Model',
@@ -73,6 +80,8 @@ allowed_titles = set([
     'References',
     'Contributors',
     'License'])
+
+
 def check_title_content(path, lines):
     includes = set()
     for idx, line in enumerate(lines):
@@ -92,6 +101,7 @@ def check_title_content(path, lines):
         lack = ', '.join(t for t in must_include_titles if t not in includes)
         print(f'Please add {lack} in {path}')
         raise Exception('Lack certain title')
+
 
 def should_have_one_table_in_model_chapter(path, lines):
     table_count = 0
@@ -119,6 +129,7 @@ def should_have_one_table_in_model_chapter(path, lines):
         f'Should have ONE-AND-ONLY-ONE table in Model chapter in {path}. ' \
         f'Got {table_count}.'
 
+
 def no_chapter_should_be_empty(path, lines):
     invalid = None
     for idx, line in enumerate(lines):
@@ -137,15 +148,16 @@ def no_chapter_should_be_empty(path, lines):
     assert not invalid, \
         f'Please fill in chapter "{invalid}" in {path}:{lineno}'
 
+
 def link_markdown(path):
     with open(path) as f:
         lines = f.readlines()
-
     check_title_syntax(path, lines)
     check_title_content(path, lines)
     no_chapter_should_be_empty(path, lines)
     should_have_one_table_in_model_chapter(path, lines)
     table_should_be_aligned(path, lines)
+
 
 def leaf_dir_should_have_readme(path):
     has_readme = False
@@ -163,6 +175,7 @@ def leaf_dir_should_have_readme(path):
     assert has_child or not has_config or has_readme, \
         f'Please provide a README.md in {path}'
 
+
 def all_model_should_be_in_cases_list(path):
     with open('full_cases.txt') as f:
         full = [line.strip(' \n') for line in f.readlines() if line]
@@ -176,7 +189,9 @@ def all_model_should_be_in_cases_list(path):
         model = os.path.dirname(fn)
         assert model in full_set, f'Please add {model} to full_cases.txt'
 
+
 targets = ['BM1684', 'BM1684X']
+
 
 def has_toolchain(config, fields):
     ret = any(f in config for f in fields)
@@ -184,13 +199,17 @@ def has_toolchain(config, fields):
         ret = ret or any(f in config.get(t, dict()) for f in fields)
     return ret
 
+
 def has_mlir_config(config):
     mlir_fields = ['mlir_transform', 'deploy', 'mlir_calibration']
     return has_toolchain(config, mlir_fields)
 
+
 def has_nntc_config(config):
-    nntc_fields = ['fp_compile_options', 'time_only_cali', 'cali', 'bmnetu_options']
+    nntc_fields = ['fp_compile_options',
+                   'time_only_cali', 'cali', 'bmnetu_options']
     return has_toolchain(config, nntc_fields)
+
 
 def config_filenames_should_be_standard(path):
     for fn in walk(path):
@@ -209,14 +228,14 @@ def config_filenames_should_be_standard(path):
             assert fn.endswith('nntc.config.yaml'), \
                 f'NNTC config should be named <optionalname.>nntc.config.yaml, {fn}'
 
-import yaml
-import re
+
 def target_should_be_valid_in_config(fn):
     targets = ['BM1684', 'BM1684X']
     patterns = [
         '(BM|bm)1684([^a-zA-Z]|$)',
         '(BM|bm)1684(x|X)']
     state = None
+
     def check_target(data):
         nonlocal state
         ok = True
@@ -241,13 +260,16 @@ def target_should_be_valid_in_config(fn):
                 if (state is None or t != state))
         return ok
     with open(fn) as f:
-        assert check_target(yaml.load(f, yaml.Loader)), f'Invalid target in {fn}'
+        assert check_target(yaml.load(f, yaml.Loader)
+                            ), f'Invalid target in {fn}'
+
 
 def target_should_be_valid(path):
     for fn in walk(path):
         if not fn.endswith('config.yaml'):
             continue
         target_should_be_valid_in_config(fn)
+
 
 def lint_markdowns(path):
     leaf_dir_should_have_readme(path)
@@ -256,14 +278,18 @@ def lint_markdowns(path):
             continue
         link_markdown(fn)
 
+
 def quote(v):
     return v.replace('_', '\_')
+
 
 def unquote(v):
     return v.replace('\_', '_')
 
+
 def row_to_key(row):
     return '-'.join(row[:2])
+
 
 def gather_model_rows(path):
     map_rows = dict()
@@ -274,9 +300,9 @@ def gather_model_rows(path):
             config = yaml.load(f, yaml.Loader)
 
         row = [
-            config.get('name', ''), \
-            os.path.dirname(fn), \
-            has_nntc_config(config), \
+            config.get('name', ''),
+            os.path.dirname(fn),
+            has_nntc_config(config),
             has_mlir_config(config)]
         key = row_to_key(row)
         if key in map_rows:
@@ -288,6 +314,7 @@ def gather_model_rows(path):
     rows = list(map_rows.values())
     rows.sort(key=lambda x: x[0].lower())
     return rows
+
 
 def rows_to_table(rows):
     def bool_to_text(v):
@@ -314,7 +341,7 @@ def rows_to_table(rows):
             row_str += f'{row[i]:{max_len[i]}}|'
         print(row_str)
 
-import re
+
 def rows_from_readme(path):
     rows = []
     state = None
@@ -353,10 +380,12 @@ def rows_from_readme(path):
                 rows.append(row)
     return rows
 
+
 def verify_model_entrys_in_readme(rows, rows_in_readme):
     # All README rows should be valid model
     readme_rows_map = {row_to_key(row): row for row in rows_in_readme}
-    assert len(readme_rows_map) == len(rows_in_readme), 'Duplicate entry found in README'
+    assert len(readme_rows_map) == len(
+        rows_in_readme), 'Duplicate entry found in README'
     rows_map = {row_to_key(row): row for row in rows}
     for row in rows_in_readme:
         key = row_to_key(row)
@@ -377,10 +406,41 @@ def verify_model_entrys_in_readme(rows, rows_in_readme):
         print()
         assert not remain, 'Models missing in README'
 
+
 def readme_should_be_aligned(readme_fn):
     with open(readme_fn) as f:
         read_lines = [line for line in f if line]
     table_should_be_aligned(readme_fn, read_lines)
+
+def key_value_iter(d):
+    if type(d) == list:
+        for v in d:
+            for k, v in key_value_iter(v):
+                yield k, v
+    elif type(d) == dict:
+        for dk, dv in d.items():
+            for k, v in key_value_iter(dv):
+                yield k, v
+            yield dk, dv
+
+def config_harness_name_should_be_standard(path):
+    for fn in walk(path):
+        if not fn.endswith('config.yaml'):
+            continue
+        with open(fn, mode='r', encoding='utf-8') as f:
+            config = yaml.load(f.read(), Loader=yaml.FullLoader)
+            for k, v in key_value_iter(config):
+                if k != 'harness':
+                    continue
+                assert 'args' in v, f'harness.args does not exist in {fn}'
+                name_set = set()
+                for arg in v['args']:
+                    assert 'name' in arg, f'harness.args.name does not exist in {fn}'
+                    name = arg['name']
+                    assert name not in name_set, \
+                        f'Duplicate harness arg name \"{name}\" in {fn}'
+                    name_set.add(name)
+
 
 def main():
     path = os.path.dirname(os.path.realpath(__file__))
@@ -394,17 +454,19 @@ def main():
     os.chdir(path)
     for path in ['vision', 'language']:
 
-        #print(f'\n### {path.capitalize()}\n')
-        #rows_to_table(gather_model_rows(path))
-        #continue
+        # print(f'\n### {path.capitalize()}\n')
+        # rows_to_table(gather_model_rows(path))
+        # continue
 
         rows.extend(gather_model_rows(path))
         config_filenames_should_be_standard(path)
         target_should_be_valid(path)
         lint_markdowns(path)
         all_model_should_be_in_cases_list(path)
+        config_harness_name_should_be_standard(path)
 
     verify_model_entrys_in_readme(rows, rows_in_readme)
+
 
 if __name__ == '__main__':
     main()

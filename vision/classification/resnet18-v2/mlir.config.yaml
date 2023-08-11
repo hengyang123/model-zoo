@@ -74,5 +74,5 @@ BM1684X:
         bmodel: $(workdir)/$(name)_bm1684x_f32.bmodel
       - name: INT8
         bmodel: $(workdir)/$(name)_bm1684x_int8_sym.bmodel
-      - name: INT8
+      - name: INT8-asym
         bmodel: $(workdir)/$(name)_bm1684x_int8_asym.bmodel

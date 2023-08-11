@@ -64,28 +64,28 @@ BM1684:
   harness:
     type: basicvsr
     args:
-      - name: FP32
+      - name: FP32-BDx4
         bmodel: $(workdir)/$(pure_name)_$(target)_f32.bmodel
         spynet: $(workdir)/$(pure_name)_$(target)_f32.bmodel
         backward: $(bwdir)/basicvsr_backward_$(target)_f32.bmodel
         forward: $(fwdir)/basicvsr_forward_$(target)_f32.bmodel
         upsample: $(uwkdir)/basicvsr_upsample_$(target)_f32.bmodel
         lrkey: BDx4
-      - name: FP32
+      - name: FP32-BIx4
         bmodel: $(workdir)/$(pure_name)_$(target)_f32.bmodel
         spynet: $(workdir)/$(pure_name)_$(target)_f32.bmodel
         backward: $(bwdir)/basicvsr_backward_$(target)_f32.bmodel
         forward: $(fwdir)/basicvsr_forward_$(target)_f32.bmodel
         upsample: $(uwkdir)/basicvsr_upsample_$(target)_f32.bmodel
         lrkey: BIx4
-      - name: INT8
+      - name: INT8-sym-BDx4
         bmodel: $(workdir)/$(pure_name)_$(target)_int8_sym.bmodel
         spynet: $(workdir)/$(pure_name)_$(target)_int8_sym.bmodel
         backward: $(bwdir)/basicvsr_backward_$(target)_int8_sym.bmodel
         forward: $(fwdir)/basicvsr_forward_$(target)_int8_sym.bmodel
         upsample: $(uwkdir)/basicvsr_upsample_$(target)_int8_sym.bmodel
         lrkey: BDx4
-      - name: INT8
+      - name: INT8-sym-BIx4
         bmodel: $(workdir)/$(pure_name)_$(target)_int8_sym.bmodel
         spynet: $(workdir)/$(pure_name)_$(target)_int8_sym.bmodel
         backward: $(bwdir)/basicvsr_backward_$(target)_int8_sym.bmodel

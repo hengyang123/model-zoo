@@ -14,7 +14,7 @@ ArcFace: Additive Angular Margin Loss for Deep Face Recognition.
 
 ## Dataset
 
-[COCO2017](https://cocodataset.org/)
+[MS1MV2](https://github.com/deepinsight/insightface/tree/master/recognition/_datasets)
 
 ## References
 
